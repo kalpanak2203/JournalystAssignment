@@ -25,139 +25,123 @@ const App = () => {
     loadData();
   }, []);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-        <div className="p-8 text-center text-2xl text-indigo-700 font-semibold animate-pulse">
-          🚀 Loading Journalyst Analytics...
-        </div>
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="p-8 text-center text-2xl text-indigo-700 font-semibold animate-pulse">
+        🚀 Loading Journalyst Analytics...
       </div>
-    );
+    </div>
+  );
 
-  if (error)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-100 via-orange-100 to-yellow-100">
-        <div className="p-8 text-center text-red-700 font-bold bg-white rounded-xl shadow-2xl border-t-4 border-red-500">
-          ❌ Error: {error}
-        </div>
+  if (error) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="p-8 text-center text-red-700 font-bold bg-white rounded-xl shadow-2xl border-t-4 border-red-500">
+        ❌ Error: {error}
       </div>
-    );
+    </div>
+  );
 
-  if (!data) return <div className="p-8 text-center text-gray-700">No data available.</div>;
+  if (!data) return (
+    <div className="p-8 text-center text-gray-700">No data available.</div>
+  );
 
   const summary = data.summary;
 
   const getColorClass = (value, isReturn = true) => {
     if (value === 0) return 'text-gray-900';
-    if (isReturn) {
-      return value > 0 ? 'text-green-600' : 'text-red-600';
-    } else {
-      return value >= 1 ? 'text-green-600' : 'text-amber-600';
-    }
+    if (isReturn) return value > 0 ? 'text-green-600' : 'text-red-600';
+    return value >= 1 ? 'text-green-600' : 'text-amber-600';
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-indigo-50 to-purple-100 px-6 md:px-12 lg:px-20 py-8">
-      
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-14 tracking-tight">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 drop-shadow-md">
-          📊 Trading Performance Dashboard
-        </span>
+    <div className="min-h-screen p-6 md:p-12 space-y-12">
+      <h1 className="header-title">
+        📊 TRADING PERFORMANCE DASHBOARD
       </h1>
+      <p className="header-subtitle">Evaluate your recent trading behavior and key performance indicators.</p>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-14">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         <MetricCard
-          title="Win Rate"
+          title="Win Rate (%)"
           value={summary.winRate}
           unit="%"
           colorClass={getColorClass(summary.winRate - 50)}
-          description="Percentage of trades that were profitable."
+          description="Percentage of profitable trades"
         />
         <MetricCard
           title="Profit Factor"
           value={summary.profitFactor}
           colorClass={getColorClass(summary.profitFactor, false)}
-          description="Gross Profits / Gross Losses. (1.0+ is desirable)"
+          description="Ratio of gross profits to gross losses"
         />
         <MetricCard
-          title="Avg Return"
+          title="Average Return (%)"
           value={summary.averageReturn}
           unit="%"
           colorClass={getColorClass(summary.averageReturn)}
-          description="Average % gain/loss across all trades."
+          description="Average % return per trade (across all trades)"
         />
         <MetricCard
-          title="Max Drawdown"
+          title="Maximum Drawdown (%)"
           value={summary.maxDrawdown}
           unit="%"
           colorClass="text-red-600"
-          description="Largest peak-to-trough decline in equity."
+          description="The largest % drop from a peak to a trough in equity curve"
         />
         <MetricCard
           title="Sharpe Ratio"
           value={summary.sharpeRatio}
           colorClass={getColorClass(summary.sharpeRatio - 1, false)}
-          description="Risk-adjusted return (Higher is better, 1.0 is benchmark)."
+          description="Risk-adjusted return performance"
         />
       </div>
 
-      {/* Middle Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-14">
-        
-        {/* P/L Breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <PLBreakdownCard
           currency={summary.cumulativePL_currency}
           percentage={summary.cumulativePL_percentage}
         />
-
-        {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-6">
           <MetricCard
             title="Total Trades"
             value={summary.totalTrades}
             colorClass="text-blue-600"
-            description="Total number of trades analyzed."
+            description="Number of trades included in the calculation"
           />
           <MetricCard
-            title="Winning Trades"
+            title="Winning Trades Count"
             value={summary.winningTradesCount}
             colorClass="text-green-600"
-            description="Total number of profitable trades."
+            description="Total number of profitable trades"
           />
           <MetricCard
-            title="Losing Trades"
+            title="Losing Trades Count"
             value={summary.losingTradesCount}
             colorClass="text-red-600"
-            description="Total number of loss-making trades."
+            description="Total number of loss-making trades"
           />
           <MetricCard
             title="Longest Win Streak"
             value={summary.longestWinStreak}
             colorClass="text-green-600"
-            description="Maximum consecutive winning trades."
+            description="Maximum consecutive profitable trades"
           />
           <MetricCard
             title="Longest Loss Streak"
             value={summary.longestLossStreak}
             colorClass="text-red-600"
-            description="Maximum consecutive losing trades."
+            description="Maximum consecutive losing trades"
           />
         </div>
-
-        {/* Win/Loss Chart */}
         <WinRateChart
           winCount={summary.winningTradesCount}
           lossCount={summary.losingTradesCount}
         />
       </div>
-
-      {/* Recent Trades */}
-      <div className="bg-red rounded-2xl shadow-2xl p-8 transition transform hover:scale-[1.01] hover:shadow-3xl">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          📈 Recent Trades
-        </h2>
+      <section>
         <RecentTradesTable trades={data.recentTrades} />
-      </div>
+      </section>
+
     </div>
   );
 };

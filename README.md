@@ -76,3 +76,10 @@ Client runs on http://localhost:3000
 ## API Endpoints
 
 - `GET /analytics` - Fetch trading analytics data
+
+## APP Screenshots
+
+![App Screenshot](screenshots/Screenshot%202025-10-03%20at%2012.45.40 AM.png)
+![App Screenshot](screenshots/Screenshot%202025-10-03%20at%2012.45.54 AM.png)
+![App Screenshot](screenshots/Screenshot%202025-10-03%20at%2012.46.01 AM.png)
+![App Screenshot](screenshots/Screenshot%202025-10-03%20at%2012.46.09 AM.png)
